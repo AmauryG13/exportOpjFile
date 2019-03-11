@@ -18,16 +18,16 @@
     <ClInclude Include="pch.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginParser.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\tree.hh">
+    <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\config.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginFile.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginObj.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginParser.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,19 +38,14 @@
     <ClCompile Include="exportOpjFile.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginParser.cpp">
+    <ClCompile Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginAnyParser.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginFile.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="D:\Logiciels\SDK\liborigin-3.0.0\liborigin.pc.in">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="D:\Logiciels\SDK\liborigin-3.0.0\config.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </None>
+    <ClCompile Include="D:\Logiciels\SDK\liborigin-3.0.0\OriginParser.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

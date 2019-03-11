@@ -3,12 +3,31 @@
 
 #include "pch.h"
 #include "OriginFile.h"
-
 #include <iostream>
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::cout << "Hello World!\n"; 
+	if (argc < 2) {
+		std::cout << "Usage: exportOpjFile.exe <file.opj>" << endl;
+		return -1;
+	}
+
+	string input = argv[argc - 1];
+	OriginFile opj(input);
+
+	int status = opj.parse();
+
+	std::cout << "Parsing status = " << status << endl;
+	std::cout << "OPJ PROJECT \"" << input.c_str() << "\" VERSION = " << opj.version() << endl;
+
+	std::cout << "number of datasets     = " << opj.datasetCount() << endl;
+	std::cout << "number of spreadsheets = " << opj.spreadCount() << endl;
+	std::cout << "number of matrixes     = " << opj.matrixCount() << endl;
+	std::cout << "number of excels       = " << opj.excelCount() << endl;
+	std::cout << "number of functions    = " << opj.functionCount() << endl;
+	std::cout << "number of graphs       = " << opj.graphCount() << endl;
+	std::cout << "number of notes        = " << opj.noteCount() << endl;
+
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
