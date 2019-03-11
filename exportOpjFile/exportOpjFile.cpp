@@ -27,6 +27,38 @@ int main(int argc, char *argv[])
 	std::cout << "number of functions    = " << opj.functionCount() << endl;
 	std::cout << "number of graphs       = " << opj.graphCount() << endl;
 	std::cout << "number of notes        = " << opj.noteCount() << endl;
+	
+	for (size_t e = 0; e < 1; e++) {
+		Origin::Excel excel = opj.excel(e);
+
+		std::cout << "Excel " << (e + 1) << endl;
+		std::cout << "Name: " << excel.name.c_str() << endl;
+		std::cout << "Label: " << excel.label.c_str() << endl;
+
+		//int rows = excel.maxRows();
+		vector<Origin::SpreadSheet> sheets = excel.sheets;
+		std::cout << "Spreads size :" << sheets.size() << endl;
+
+		for (size_t es = 0; es < sheets.size(); es++) {
+			Origin::SpreadSheet sheet = sheets[es];
+
+			cout << "Spreadsheet " << (es + 1) << endl;
+			cout << " Name: " << sheet.name.c_str() << endl;
+
+			int excelColumnCount = sheet.columns.size();
+			std::cout << "Columns in the sheet: " << excelColumnCount << endl;
+
+			for (size_t esc = 0; esc < excelColumnCount; esc++) {
+				Origin::SpreadColumn column = sheet.columns[esc];
+				cout << "	Column " << (esc + 1) << " : " << column.name.c_str() << " / type : " << column.type << ", rows : " << sheet.maxRows << endl;
+			}
+				
+		}
+
+		//std::cout << "Title: " << excel.title.c_str() << endl;
+	}
+
+	
 
 }
 
