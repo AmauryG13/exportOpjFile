@@ -1,67 +1,114 @@
 // exportOpjFile.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
 //
 
-#include "pch.h"
 #include "OriginFile.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
 {
+	bool parseData = false;
+	char OpjExtension = '.opj';
+
 	if (argc < 2) {
-		std::cout << "Usage: exportOpjFile.exe <file.opj>" << endl;
+		cout << "Usage: exportOpjFile.exe <file.opj>" << endl;
 		return -1;
 	}
 
 	string input = argv[argc - 1];
+	
+	int folderNameIdx = input.find(OpjExtension);
+	string folder = input.substr(1, folderNameIdx);
+
+	// Open File
 	OriginFile opj(input);
 
 	int status = opj.parse();
 
-	std::cout << "Parsing status = " << status << endl;
-	std::cout << "OPJ PROJECT \"" << input.c_str() << "\" VERSION = " << opj.version() << endl;
+	cout << "Parsing status = " << status << endl;
+	cout << "OPJ PROJECT \"" << input.c_str() << "\" VERSION = " << opj.version() << endl;
 
-	std::cout << "number of datasets     = " << opj.datasetCount() << endl;
-	std::cout << "number of spreadsheets = " << opj.spreadCount() << endl;
-	std::cout << "number of matrixes     = " << opj.matrixCount() << endl;
-	std::cout << "number of excels       = " << opj.excelCount() << endl;
-	std::cout << "number of functions    = " << opj.functionCount() << endl;
-	std::cout << "number of graphs       = " << opj.graphCount() << endl;
-	std::cout << "number of notes        = " << opj.noteCount() << endl;
+	cout << "number of datasets     = " << opj.datasetCount() << endl;
+	cout << "number of spreadsheets = " << opj.spreadCount() << endl;
+	cout << "number of matrixes     = " << opj.matrixCount() << endl;
+	cout << "number of excels       = " << opj.excelCount() << endl;
+	cout << "number of functions    = " << opj.functionCount() << endl;
+	cout << "number of graphs       = " << opj.graphCount() << endl;
+	cout << "number of notes        = " << opj.noteCount() << endl;
+
+	cout << endl << "----------" << endl;
 	
-	for (size_t e = 0; e < 1; e++) {
+	for (int e = 0; e < 1/*opj.excelCount()*/; e++) {
 		Origin::Excel excel = opj.excel(e);
 
-		std::cout << "Excel " << (e + 1) << endl;
-		std::cout << "Name: " << excel.name.c_str() << endl;
-		std::cout << "Label: " << excel.label.c_str() << endl;
+		string name = excel.name;
+		string label = excel.label;
 
-		//int rows = excel.maxRows();
+		int FileNameIdx = label.find(EOL);
+		string FileName = label.substr(1, FileNameIdx);
+		
+		cout << "Excel " << (e + 1) << endl;
+		cout << " Name: " << name.c_str() << endl;
+		cout << " Label: " << label.c_str() << endl;
+
 		vector<Origin::SpreadSheet> sheets = excel.sheets;
-		std::cout << "Spreads size :" << sheets.size() << endl;
 
-		for (size_t es = 0; es < sheets.size(); es++) {
-			Origin::SpreadSheet sheet = sheets[es];
+		for (int s = 0; s < sheets.size(); s++) {
+			Origin::SpreadSheet sheet = sheets[s];
 
-			cout << "Spreadsheet " << (es + 1) << endl;
+			cout << "Spreadsheet " << (s + 1) << endl;
 			cout << " Name: " << sheet.name.c_str() << endl;
+			cout << " Label: " << sheet.label.c_str() << endl;
 
-			int excelColumnCount = sheet.columns.size();
-			std::cout << "Columns in the sheet: " << excelColumnCount << endl;
+			if (sheet.name == "Data") parseData = true; else parseData = false;
+			
+			vector<Origin::SpreadColumn> columns = sheet.columns;
+			int columnsCount = columns.size();
+			cout << "	Columns: " << columnsCount << endl;
 
-			for (size_t esc = 0; esc < excelColumnCount; esc++) {
-				Origin::SpreadColumn column = sheet.columns[esc];
-				cout << "	Column " << (esc + 1) << " : " << column.name.c_str() << " / type : " << column.type << ", rows : " << sheet.maxRows << endl;
-			}
+
+			for (int c = 0; c < columnsCount; c++) {
+				Origin::SpreadColumn column = columns[c];
+				cout << "	Column " << (c + 1) << " : " << column.name.c_str() << " / type : " << column.type << ", rows : " << sheet.maxRows << endl;
+
+				int dataCount = column.data.size();
+
+				if (parseData) {
+					for (int d = 0; d < dataCount; d++) {
+						Origin::variant value(column.data[d]);
+
+						switch (value.type()) {
+						case Origin::variant::V_DOUBLE: {
+							double v = value.as_double();
+
+							if (v != _ONAN) {
+								cout << v << "; ";
+							}
+							else {
+								cout << nan("NaN") << "; ";
+							}
+
+							break;
+						}
+						case Origin::variant::V_STRING:
+							cout << value.as_string() << ",";
+							break;
+						default:
+							cout << nan("NaN") << ",";
+							break;
+						}
+					}
+
+					cout << endl;
+				}
+
 				
+			}
+
+
+			
 		}
-
-		//std::cout << "Title: " << excel.title.c_str() << endl;
 	}
-
-	
-
 }
-
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
 // Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
 
