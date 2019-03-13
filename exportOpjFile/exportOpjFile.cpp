@@ -51,9 +51,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	else {
-		cout << "Initializing saving file in the folder: " << folder.c_str() << endl;
+		cout << "Initializing saving file in the folder: " << folder.c_str() << endl; 
 	}
 	
+	cout << endl;
+
 	for (int e = 0; e < opj.excelCount(); e++) {
 		Origin::Excel excel = opj.excel(e);
 
@@ -71,7 +73,7 @@ int main(int argc, char *argv[])
 
 		vector<Origin::SpreadSheet> sheets = excel.sheets;
 
-		string filepath = folder + string("/") + FileName + OpjExtension;
+		string filepath = folder + string("/") + FileName + ".txt";
 		cout << filepath << endl; 
 		ofstream outputFile(filepath.c_str(), ios::out);
 
@@ -163,6 +165,7 @@ int main(int argc, char *argv[])
 			outputFile << endl;
 		}
 
+		cout << endl; 
 		outputFile.close();
 	}
 }
