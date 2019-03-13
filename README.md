@@ -7,6 +7,13 @@ And then, over the spreadsheets contained in the excel.
 
 > Only, the **data** spreadsheet is extracted.
 
+## Usage
+The usage is pretty simple :
+`./exportOpjFile "path/to/file"`
+
+The output generated is a number of files (as many as excels in the file), inside a folder.
+The folder is at the path that the parsed file under the same name of the parsed file (without the file extension).
+
 ### Dependencies
 The executable is based on the __**liborigin**__ [library](https://sourceforge.net/projects/liborigin/).
 
