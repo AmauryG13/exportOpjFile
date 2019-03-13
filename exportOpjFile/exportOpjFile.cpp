@@ -27,13 +27,6 @@ int main(int argc, char *argv[])
 	string folder = input.substr(0, folderNameIdx);
 
 	const int dir_err = fs::create_directory(folder.c_str());
-	if (dir_err == -1 && !fs::exists(folder)) {
-		cout << "Error: impossible to create folder to save file" << endl;
-		return -1; 
-	}
-	else {
-		cout << "Initializing saving file in the folder: " << folder.c_str() << endl;
-	}
 
 	// Open File
 	OriginFile opj(input);
@@ -52,8 +45,16 @@ int main(int argc, char *argv[])
 	cout << "number of notes        = " << opj.noteCount() << endl;
 
 	cout << endl << "----------" << endl;
+
+	if (dir_err == -1 && !fs::exists(folder)) {
+		cout << "Error: impossible to create folder to save file" << endl;
+		return -1;
+	}
+	else {
+		cout << "Initializing saving file in the folder: " << folder.c_str() << endl;
+	}
 	
-	for (int e = 0; e < 1/*opj.excelCount()*/; e++) {
+	for (int e = 0; e < opj.excelCount(); e++) {
 		Origin::Excel excel = opj.excel(e);
 
 		string name = excel.name;
@@ -62,9 +63,11 @@ int main(int argc, char *argv[])
 		int FileNameIdx = label.find("\n");
 		string FileName = label.substr(0, FileNameIdx-1);
 		
+		#ifdef DEBUG
 		cout << "Excel " << (e + 1) << endl;
 		cout << " Name: " << name.c_str() << endl;
 		cout << " Label: " << FileName << endl;
+		#endif
 
 		vector<Origin::SpreadSheet> sheets = excel.sheets;
 
@@ -86,20 +89,25 @@ int main(int argc, char *argv[])
 		for (int s = 0; s < sheets.size(); s++) {
 			Origin::SpreadSheet sheet = sheets[s];
 
+			#ifdef DEBUG
 			cout << "  Spreadsheet " << (s + 1) << endl;
 			cout << "   Name: " << sheet.name.c_str() << endl;
 			cout << "   Label: " << sheet.label.c_str() << endl;
+			#endif
 
 			if (sheet.name == "Data") parseData = true; else parseData = false;
 			
 			vector<Origin::SpreadColumn> columns = sheet.columns;
 			int columnsCount = columns.size();
+			#ifdef DEBUG
 			cout << "	Columns: " << columnsCount << endl;
-
+			#endif
 
 			for (int c = 0; c < columnsCount; c++) {
 				Origin::SpreadColumn column = columns[c];
+				#ifdef DEBUG
 				cout << "	Column " << (c + 1) << " : " << column.name.c_str() << " / type : " << column.type << ", rows : " << sheet.maxRows << endl;
+				#endif
 			}
 
 				
@@ -120,22 +128,32 @@ int main(int argc, char *argv[])
 							double v = value.as_double();
 
 							if (v != _ONAN) {
-								cout << v << ";" ;
+								#ifdef DEBUG
+								cout << v << "; " ;
+								#endif
 								outputFile << v << sep.c_str();
 
 							}
 							else {
+								#ifdef DEBUG
 								cout << nan("NaN") << "; ";
+								#endif
 								outputFile << nan("NaN") << sep.c_str();
 							}
 
 							break;
 						}
 						case Origin::variant::V_STRING:
-							cout << value.as_string() << sep.c_str();
+							#ifdef DEBUG
+							cout << value.as_string() << "; ";
+							#endif
+							outputFile << value.as_string() << sep.c_str();
 							break;
 						default:
-							cout << nan("NaN") << sep.c_str();
+							#ifdef DEBUG
+							cout << nan("NaN") << "; ";
+							#endif
+							outputFile << nan("NaN") << sep.c_str();
 							break;
 						}
 					}
